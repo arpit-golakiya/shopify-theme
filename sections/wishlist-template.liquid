@@ -1,0 +1,68 @@
+<div class="page-width">
+  <h2 class="h2" style="text-align:center;">My Wishlist ❤️</h2>
+  <div id="wishlist-container" class="grid grid--uniform"></div>
+  <p id="empty-wishlist" style="text-align: center; display: none;">Your wishlist is empty 😢</p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wishlistContainer = document.getElementById('wishlist-container');
+    const emptyMessage = document.getElementById('empty-wishlist');
+
+    let wishlist = [];
+    try {
+      wishlist = JSON.parse(localStorage.getItem('user-wishlist')) || [];
+    } catch (e) {
+      console.error("❌ Error parsing wishlist from localStorage:", e);
+    }
+
+    console.log("📦 Loaded Wishlist:", wishlist);
+
+    if (!Array.isArray(wishlist) || wishlist.length === 0) {
+      emptyMessage.style.display = 'block';
+      return;
+    }
+
+    wishlist.forEach(function (handle) {
+      console.log("🔍 Fetching:", `/products/${handle}.js`);
+      fetch(`/products/${handle}.js`)
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Product fetch failed");
+          }
+          return response.json();
+        })
+        .then(function (product) {
+          console.log("✅ Fetched:", product.title);
+          const productHTML = `
+            <div class="grid__item medium-up--one-quarter small--one-half" style="padding: 15px;">
+              <div class="card" style="border: 1px solid #eee; padding: 10px; text-align: center;">
+                <a href="/products/${product.handle}">
+                  <img src="${product.featured_image}" alt="${product.title}" style="width:100%;">
+                  <h3>${product.title}</h3>
+                  <p><strong>₹${(product.price / 100).toFixed(2)}</strong></p>
+                </a>
+              </div>
+            </div>
+          `;
+          wishlistContainer.innerHTML += productHTML;
+        })
+        .catch(function (error) {
+          console.error(`❌ Error for ${handle}:`, error);
+        });
+    });
+  });
+</script>
+
+
+
+
+<!-- ✅ This line added to load wishlist button script -->
+<script src="{{ 'wishlist.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Wishlist Template",
+  "settings": []
+}
+{% endschema %}

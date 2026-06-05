@@ -1,0 +1,108 @@
+{% schema %}
+{
+  "name": "Customer Testimonials",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Customer Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer Name",
+          "default": "John Doe"
+        },
+        {
+          "type": "text",
+          "id": "age",
+          "label": "Customer Age",
+          "default": "25"
+        },
+        {
+          "type": "textarea",
+          "id": "message",
+          "label": "Testimonial Message",
+          "default": "This is a sample testimonial message."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Testimonials",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div class="testimonial-section">
+  <h2 class="testimonial-heading">Customer Testimonials</h2>
+  <div class="testimonial-container swiper-container">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="testimonial-card swiper-slide-testinomal">
+          <div class="testimonial-clip">
+            <img src="https://cdn.shopify.com/s/files/1/0919/8859/0885/files/pin.webp?v=1741687500" alt="clip">
+          </div>
+          <div class="testimonial-image">
+            {% if block.settings.image %}
+              <img src="{{ block.settings.image | img_url: 'large' }}" alt="{{ block.settings.name }}">
+            {% else %}
+              <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+            {% endif %}
+          </div>
+          <div class="testimonial-content">
+            <h3>{{ block.settings.name }}, {{ block.settings.age }}</h3>
+            <p>{{ block.settings.message }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  new Swiper(".swiper-container", {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    breakpoints: {
+      480: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      }
+    }
+  });
+});
+</script>

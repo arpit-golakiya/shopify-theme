@@ -1,0 +1,505 @@
+<link rel="stylesheet" href="{{ 'component-diamond-shape-grid.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-diamond-shape-grid.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign mg_top_desktop = section.settings.mg_top_desktop | append: 'px'
+    assign mg_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign mg_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign mg_bottom_desktop = section.settings.mg_bottom_desktop | append: 'px'
+    assign mg_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign mg_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign container = section.settings.container
+    assign padding_full_width = section.settings.padding_full_width | append: 'px'
+    assign section_title = section.settings.section_title
+    assign section_title_font_size = section.settings.section_title_font_size | append: 'px'
+    assign section_title_font_size_mb = section.settings.section_title_font_size_mb | append: 'px'
+    assign section_title_color = section.settings.section_title_color
+    assign section_title_font_weight = section.settings.section_title_font_weight
+    assign section_title_margin_top = section.settings.section_title_margin_top | append: 'px'
+    assign content_width = section.settings.content_width | append: 'px'
+    assign content_gap = section.settings.content_gap | append: 'px'
+    assign grid_columns = section.settings.grid_columns
+    assign grid_gap = section.settings.grid_gap | append: 'px'
+    assign grid_gap_mobile = section.settings.grid_gap_mobile | append: 'px'
+-%}
+
+<div class="diamond-shape-grid-section section-block-{{section.id}}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="diamond-shape-grid-section-{{section.id}}">
+    <div class="{% if container == 'fullwidth' %}container-full{% elsif container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% else %}container{% endif %}">
+        {%- if section_title != blank -%}
+            {% comment %} <h2 class="title{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--fade-in{% endif %}" style="{% if settings.banner_animation == 'effect_fade_up' %}--animation-order: 0;{% endif %}--title-font-size: {{ section_title_font_size }}; --title-font-size-mb: {{ section_title_font_size_mb }}; --title-font-weight: {{ section_title_font_weight }}; --title-color: {% if section_title_color != blank %}{{ section_title_color }}{% endif %}; --title-margin-top: {{ section_title_margin_top }}">{{ section_title }}</h2> {% endcomment %}
+            <div class="halo-block-header text-center">
+                    <h3 class="title scroll-trigger animate--slide-in" style="--margin-bottom-title: 5px"><span class="text">Shop Diamond by Shape</span></h3></div>   
+        {%- endif -%}
+        <div class="section-wrapper">
+            <!-- Left Side - Featured Image and Title -->
+            <div class="section-left">
+                {%- if section.settings.show_featured_image -%}
+                    <div class="featured-diamond-image{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--fade-in{% endif %}" style="{% if settings.banner_animation == 'effect_fade_up' %}--animation-order: 2;{% endif %}">
+                        {%- if section.settings.default_featured_image != blank -%}
+                            <img id="featured-diamond-img" src="{{ section.settings.default_featured_image | img_url: '600x600', scale: 2 }}" alt="{{ section.settings.default_featured_image.alt | escape }}" loading="lazy">
+                        {%- elsif section.blocks.first.settings.image != blank -%}
+                            <img id="featured-diamond-img" src="{{ section.blocks.first.settings.image | img_url: '600x600', scale: 2 }}" alt="{{ section.blocks.first.settings.title | escape }}" loading="lazy">
+                        {%- else -%}
+                            <div class="featured-placeholder">
+                                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="200" height="200" fill="#f8f9fa"/>
+                                    <path d="M100 50L120 90L160 90L130 120L140 160L100 130L60 160L70 120L40 90L80 90L100 50Z" fill="#d4af37"/>
+                                </svg>
+                                <p>Featured Diamond Image</p>
+                            </div>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+            </div>
+            
+            <!-- Right Side - Diamond Shapes Grid -->
+            <div class="section-right">
+                <div class="diamond-shapes-grid">
+                    {%- for block in section.blocks -%}
+                        {%- assign diamond_img = block.settings.image -%}
+                        {%- assign diamond_title = block.settings.title -%}
+                        {%- assign diamond_link = block.settings.link -%}
+                        <div class="diamond-item{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %} data-diamond-img="{{ diamond_img | img_url: '600x600', scale: 2 }}" data-diamond-title="{{ diamond_title | escape }}">
+                            <a href="{{ diamond_link }}" class="diamond-link">
+                                {%- if diamond_img != blank -%}
+                                    <div class="diamond-image-wrapper">
+                                        <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ diamond_img | img_url: '200x200', crop: 'center' }}" {% unless settings.enable_lazyload %}src="{{ diamond_img | img_url: '200x200', crop: 'center' }}"{% endunless %} alt="{{ diamond_title | escape }}"{% unless settings.enable_layout_rtl %} loading="lazy"{% endunless %}{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+                                        {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                    </div>
+                                {%- else -%}
+                                    <div class="diamond-image-wrapper placeholder">
+                                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M30 10L35 25L50 25L37.5 35L42.5 50L30 40L17.5 50L22.5 35L10 25L25 25L30 10Z" fill="#d4af37"/>
+                                        </svg>
+                                    </div>
+                                {%- endif -%}
+                                {%- if diamond_title != blank -%}
+                                    <div class="diamond-title">{{ diamond_title }}</div>
+                                {%- endif -%}
+                            </a>
+                        </div>
+                    {%- endfor -%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const diamondItems = document.querySelectorAll('.diamond-item');
+    const featuredImage = document.getElementById('featured-diamond-img');
+    
+    if (featuredImage) {
+      // Set default image dimensions for better performance
+      if (featuredImage.src.includes('master')) {
+        const optimizedSrc = featuredImage.src.replace('master', '600x600');
+        featuredImage.src = optimizedSrc;
+      }
+      
+      // Handle both mouse and touch events for all devices
+      diamondItems.forEach(item => {
+        // For desktop - mouse hover
+        item.addEventListener('mouseenter', function() {
+          updateFeaturedImage(this);
+        });
+        
+        // For mobile - touch
+        item.addEventListener('touchstart', function(e) {
+          updateFeaturedImage(this);
+        }, {passive: true});
+      });
+      
+      function updateFeaturedImage(item) {
+        const imgUrl = item.getAttribute('data-diamond-img');
+        const imgAlt = item.getAttribute('data-diamond-title');
+        
+        if (imgUrl) {
+          // Optimize the image URL for better performance
+          const optimizedUrl = imgUrl.includes('master') ? 
+            imgUrl.replace('master', '600x600') : imgUrl;
+          
+          featuredImage.src = optimizedUrl;
+          featuredImage.alt = imgAlt || '';
+        }
+      }
+    }
+  });
+</script>
+
+<style>
+    @media (min-width: 1200px) {.section-block-{{section.id}} {padding-top: {{ mg_top_desktop }};padding-bottom: {{ mg_bottom_desktop }}}}
+    @media (min-width: 1025px) {
+        {%- if section.settings.container == 'fullwidth' -%}
+            .section-block-{{section.id}} .container-full {padding-left: {{ padding_full_width }};padding-right: {{ padding_full_width }}}
+        {%- endif -%}
+    }
+    @media (min-width: 768px) and (max-width: 1199px) {.section-block-{{ section.id }} {padding-top: {{ mg_top_tablet }};padding-bottom: {{ mg_bottom_tablet }}}}
+    @media (max-width: 767px) {.section-block-{{ section.id }} {padding-top: {{ mg_top_mobile }};padding-bottom: {{ mg_bottom_mobile }}}}
+</style>
+
+{% schema %}
+{
+    "name": "Shop Diamond by Shape",
+    "class": "section-diamond-shape-grid",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_featured_image",
+            "label": "Show Featured Image",
+            "default": true,
+            "info": "Display a featured image on the left that changes when hovering over diamond shapes"
+        },
+        {
+            "type": "image_picker",
+            "id": "default_featured_image",
+            "label": "Default Featured Image",
+            "info": "This image will be shown initially before hovering over any diamond shape"
+        },
+        { 
+            "type": "select",
+            "id": "container",
+            "label": "Container Type",
+            "default": "container",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "Container"
+                },
+                {
+                    "value": "1170",
+                    "label": "Container 1170px"
+                },
+                {
+                    "value": "1770",
+                    "label": "Container 1770px"
+                },
+                {
+                    "value": "fullwidth",
+                    "label": "Full Width"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "padding_full_width",
+            "label": "Full Width Padding",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 0
+        },
+        {
+            "type": "header",
+            "content": "Section Title"
+        },
+        {
+            "type": "text",
+            "id": "section_title",
+            "label": "Title",
+            "default": "Shop Diamonds by Shape"
+        },
+        {
+            "type": "range",
+            "id": "section_title_font_size",
+            "label": "Title Font Size",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 36,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "section_title_font_size_mb",
+            "label": "Title Font Size (Mobile)",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 32,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "section_title_font_weight",
+            "label": "Title Font Weight",
+            "default": "600",
+            "options": [
+                {   
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semibold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+            "type": "color",
+            "id": "section_title_color",
+            "label": "Title Color",
+            "default": "#232323"
+        },
+        {
+            "type": "range",
+            "id": "section_title_margin_top",
+            "label": "Title Margin Top",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "default": 0,
+            "unit": "px"
+        },
+        {
+            "type": "header",
+            "content": "Layout Settings"
+        },
+        {
+            "type": "select",
+            "id": "layout_style",
+            "label": "Layout Style",
+            "default": "left_image_right_grid",
+            "options": [
+                {
+                    "value": "left_image_right_grid",
+                    "label": "Left Image + Right Grid (2x5)"
+                },
+                {
+                    "value": "traditional",
+                    "label": "Traditional Header + Grid"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "content_width",
+            "label": "Header Width",
+            "min": 100,
+            "max": 500,
+            "step": 10,
+            "default": 350,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "content_gap",
+            "label": "Gap Between Header and Content",
+            "min": 0,
+            "max": 300,
+            "step": 10,
+            "default": 60,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "grid_columns",
+            "label": "Number of Columns",
+            "min": 2,
+            "max": 6,
+            "step": 1,
+            "default": 5
+        },
+        {
+            "type": "range",
+            "id": "grid_gap",
+            "label": "Grid Gap",
+            "min": 10,
+            "max": 50,
+            "step": 5,
+            "default": 20,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "grid_gap_mobile",
+            "label": "Grid Gap (Mobile)",
+            "min": 5,
+            "max": 30,
+            "step": 5,
+            "default": 15,
+            "unit": "px"
+        },
+        {
+            "type": "header",
+            "content": "Margin Top"
+        },
+        {
+            "type": "range",
+            "id": "mg_top_desktop",
+            "label": "Desktop",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 50
+        },
+        {
+            "type": "range",
+            "id": "mg_top_tablet",
+            "label": "Tablet",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 40
+        },
+        {
+            "type": "range",
+            "id": "mg_top_mobile",
+            "label": "Mobile",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 30
+        },
+        {
+            "type": "header",
+            "content": "Margin Bottom"
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_desktop",
+            "label": "Desktop",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 50
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_tablet",
+            "label": "Tablet",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 40
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_mobile",
+            "label": "Mobile",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 30
+        }
+    ],
+    "blocks": [
+        {
+            "type": "diamond_shape",
+            "name": "Diamond Shape",
+            "settings": [
+                {
+                  "type": "image_picker",
+                  "id": "image",
+                  "label" : "Diamond Image"
+                },
+                {
+                  "type": "text",
+                  "id": "title",
+                  "label": "Shape Name",
+                  "default": "Round"
+                },
+                {
+                  "type": "url",
+                  "id": "link",
+                  "label": "Link"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Shop Diamond by Shape",
+            "settings": {
+                "show_featured_image": true,
+                "section_title": "Shop Diamonds by Shape",
+                "layout_style": "left_image_right_grid",
+                "container": "container",
+                "mg_top_desktop": 50,
+                "mg_bottom_desktop": 50
+            },
+            "blocks": [
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Round"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Princess"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Emerald"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Oval"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Cushion"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Pear"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Marquise"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Radiant"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Asscher"
+                    }
+                },
+                {
+                    "type": "diamond_shape",
+                    "settings": {
+                        "title": "Heart"
+                    }
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

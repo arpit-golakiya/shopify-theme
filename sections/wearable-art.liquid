@@ -1,0 +1,119 @@
+{% schema %}
+{
+  "name": "Wearable Art Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Wearable Art"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Since our establishment, our singular focus has been on the impeccable crafting of our jewellery..."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Upload Image"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Image Alt Text",
+          "default": "Jewelry crafting process"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Wearable Art Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .wearable-art-section {
+    text-align: center;
+    padding: 50px 20px;
+  }
+
+  .wearable-art-section h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .wearable-art-section p {
+    font-size: 16px;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+  }
+
+  .wearable-art-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 images per row */
+    gap: 20px; /* Reduced gap for better spacing */
+    justify-content: center;
+    align-items: center;
+    max-width: 800px; /* Center content and control width */
+    margin: 0 auto; /* Center the grid */
+  }
+
+  .wearable-art-gallery img {
+    width: 100%;
+    max-width: 350px; /* Larger images for better appearance */
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* Hover effect for zoom */
+  .wearable-art-gallery img:hover {
+    transform: scale(1.1);
+  }
+
+  /* Mobile Responsive - 2x2 grid */
+  @media (max-width: 768px) {
+    .wearable-art-gallery {
+      grid-template-columns: repeat(2, 1fr); /* Keep 2 images per row */
+      max-width: 100%; /* Allow full width */
+    }
+  }
+
+  /* Extra small screens */
+  @media (max-width: 480px) {
+    .wearable-art-gallery {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px; /* Reduce gap for small screens */
+    }
+  }
+</style>
+
+
+<section class="wearable-art-section">
+  <h2>{{ section.settings.heading }}</h2>
+  <p>{{ section.settings.description }}</p>
+
+  <div class="wearable-art-gallery">
+    {% for block in section.blocks %}
+      {% if block.settings.image %}
+        <img src="{{ block.settings.image | img_url: '1024x1024' }}" alt="{{ block.settings.alt_text }}" loading="lazy">
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
