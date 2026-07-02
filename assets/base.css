@@ -7394,6 +7394,29 @@ summary::-webkit-details-marker {
   fill: #ffffff !important;
 }
 
+/* Disable homepage hero image zoom on scroll and hover. */
+.slideshow-wrapper .animate--zoom-in,
+.slideshow-wrapper .images-contain,
+.slideshow-wrapper .adaptive_height,
+.slideshow-wrapper .image,
+.slideshow-wrapper .slide-image,
+.slideshow-wrapper .slide-image img,
+.slideshow-wrapper .image-zoom,
+.slideshow-wrapper .image-zoom img,
+.slideshow-wrapper .animate--zoom-in:hover,
+.slideshow-wrapper .images-contain:hover,
+.slideshow-wrapper .adaptive_height:hover,
+.slideshow-wrapper .image:hover,
+.slideshow-wrapper .slide-image:hover,
+.slideshow-wrapper .slide-image:hover img,
+.slideshow-wrapper .image-zoom:hover,
+.slideshow-wrapper .image-zoom:hover img {
+  --zoom-in-ratio: 1 !important;
+  scale: 1 !important;
+  transform: none !important;
+  animation: none !important;
+  transition: none !important;
+}
 
 
 
