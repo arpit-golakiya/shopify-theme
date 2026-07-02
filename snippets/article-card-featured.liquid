@@ -2,9 +2,50 @@
     Format date Publish Blog
     {{- article.published_at | date: "%a, %b %d, %y" -}}
 {%- endcomment -%}
+{%- liquid
+    assign journal_image = blank
+    assign journal_image_padding = blank
+    assign journal_image_width = blank
+    assign journal_image_height = blank
+    if section_id contains 'featured_blog_xak74d'
+        case article_index
+            when 1
+                assign journal_image = 'journal-rose-jewellery.png'
+                assign journal_image_padding = '128.78%'
+                assign journal_image_width = 1105
+                assign journal_image_height = 1423
+            when 2
+                assign journal_image = 'journal-yellow-jewellery.png'
+                assign journal_image_padding = '128.57%'
+                assign journal_image_width = 1106
+                assign journal_image_height = 1422
+            when 3
+                assign journal_image = 'journal-white-jewellery.png'
+                assign journal_image_padding = '128.78%'
+                assign journal_image_width = 1105
+                assign journal_image_height = 1423
+        endcase
+    endif
+-%}
 <div class="article-card{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
     <div class="article-card__image-wrapper" style="--margin-bottom: {{ margin_bottom_image | append: 'px' }}">
-    {%- if article.image -%}
+    {%- if journal_image != blank -%}
+        {%- assign image_alt = article.title | escape -%}
+        <a href="{{article.url}}" class="image-zoom adaptive_height" style="padding-top: {{ journal_image_padding }}">
+            <img
+                {% if settings.enable_lazyload %}data-{% endif %}srcset="
+                {{ journal_image | asset_img_url: '360x' }} 360w,
+                {{ journal_image | asset_img_url: '720x' }} 720w,
+                {{ journal_image | asset_img_url: '1104x' }} 1104w"
+                sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+                alt="{{ image_alt }}"
+                width="{{ journal_image_width }}"
+                height="{{ journal_image_height }}"
+                {% if settings.enable_lazyload %}class="lazyload"{% endif %}
+            />
+            {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+        </a>
+    {%- elsif article.image -%}
         {%- assign image_alt = article.title | escape -%}
         {%- assign preview_img = article.image -%}
         <a href="{{article.url}}" class="image-zoom adaptive_height" style="padding-top: {{ 1 | divided_by: preview_img.aspect_ratio | times: 100 }}%">
@@ -15,7 +56,7 @@
             {%- if article.image.src.width >= 570 -%}{{ article.image.src | img_url: '570x' }} 570w,{%- endif -%}
             {%- if article.image.src.width >= 720 -%}{{ article.image.src | img_url: '720x' }} 720w,{%- endif -%}
             {%- if article.image.src.width >= 940 -%}{{ article.image.src | img_url: '940x' }} 940w,{%- endif -%}
-            {%- if article.image.src.width >= 1066 -%}{{ article.image.src | img_url: '1066x' }} 1066w{%- endif -%}" sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ image_alt }}" {% if settings.enable_lazyload %}class="lazyload"{% endif %} />
+            {%- if article.image.src.width >= 1066 -%}{{ article.image.src | img_url: '1066x' }} 1066w{%- endif -%}" sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ image_alt }}" width="{{ article.image.width }}" height="{{ article.image.height }}" {% if settings.enable_lazyload %}class="lazyload"{% endif %} />
             {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
         </a>
     {%- else -%}
